@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Status de Serviço - Alertrack Soluções</title>
+        <link rel="stylesheet" href="estilo/estilo.css">
+        <link rel="stylesheet" href="estilo/fundo.css">
+        <link rel="stylesheet" href="grafico.js">
+        <link rel="icon" href="./img/genio.png" type="genio.png">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+    </head>
+    <body>
+       <header>
+         <h1>Alertrack Status</h1>
+        </header>
+        <main>
+          <img src="img/verifica.png" alt="logo da Home Host" style="float:left;margin:3px;width:50px">
+          <h1>Todos os serviços online</h1>
+          <span> Histórico de registros: 2020 à 2022</span> 
+        </main>
+        <article>
+            <div id="chartdiv"></div>
+        </article>
+        <div id="littledev">
+            <div id="left"><div id="chardiv2"></div></div>
+            <div id="right">
+                <nav>
+                    <table>
+                        <p>Serviços<p>
+                        <tr>
+                         <td>SacDigital <img src="img/verifica.png" alt="SAC" title = "Atendimento ao cliente"></td>
+                        </tr>
+                        <tr>
+                         <td>Panfleto Online <img src="img/verifica.png" alt="PO" title = "Envio de Campanhas em massa"></td>
+                        </tr>
+                        <tr>
+                         <td>SMSIdeal <img src="img/verifica.png" alt="SMS" title = "Envio de Sms em massa"></td>
+                        </tr>
+                        <tr>
+                         <td>ConsultaIdeal <img src="img/verifica.png" alt="Consulta" title = "Consulta de Pessoas"></td>
+                        </tr>
+                        <tr>
+                         <td>WhatsApp <img src="img/verifica.png" alt="Envio de mensagens" title = ""></td>
+                        </tr>
+                        <tr>
+                          <td>WhatsApp API <img src="img/verifica.png" alt="API" title = ""></td>
+                        </tr>
+                        <tr>
+                          <td>Infraestrutura <img src="img/verifica.png" alt="Estrutura" title = ""></td>
+                        </tr>
+                    </table> 
+                </nav>       
+            </div>
+        </div> <!--Botão do WhatsApp com o meu contato-->
+        <a href="https://wa.me/5527996413595?text=Ola%20Paulo%20Henrique" style="position:fixed;width:60px;height:60px;bottom:40px;right:40px;background-color:#25d366;color:#FFF;border-radius:50px;text-align:center;font-size:30px;box-shadow: 1px 1px 2px #888;
+          z-index:1000;" target="_blank">
+        <i style="margin-top:16px" class="fa fa-whatsapp"></i>
+        </a>
+        <div>
+
+        </div>
+        <footer>
+          <h2>Desenvolvido por Paulo Henrique. © 2022</h2>
+        </footer>
+    </body>
+    <!--1º gráfico-->>
+    <script>
+      am5.ready(function() {
+      var root = am5.Root.new("chartdiv");
+      root.setThemes([
+      am5themes_Animated.new(root)]);
+
+      var chart = root.container.children.push(am5xy.XYChart.new(root, {
+      panX: false,
+      panY: false,
+      wheelX: "panX",
+      wheelY: "zoomX",
+      layout: root.verticalLayout}));
+      var legend = chart.children.push(
+      am5.Legend.new(root, {
+      centerX: am5.p50,
+      x: am5.p50}));
+      var data = [{
+  "year": "2020",
+  "BR": 62,
+  "MEXICO": 13,
+  "RU": 11
+}, {
+  "year": "2021",
+  "BR": 145,
+  "MEXICO": 21,
+  "RU": 13
+}, {
+  "year": "2022",
+  "BR": 221,
+  "MEXICO": 43,
+  "RU": 16
+}]
+var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+  categoryField: "year",
+  renderer: am5xy.AxisRendererX.new(root, {
+    cellStartLocation: 0.1,
+    cellEndLocation: 0.9
+  }),
+  tooltip: am5.Tooltip.new(root, {})
+}));
+xAxis.data.setAll(data);
+var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+  renderer: am5xy.AxisRendererY.new(root, {})
+}));
+function makeSeries(name, fieldName) {
+  var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+    name: name,
+    xAxis: xAxis,
+    yAxis: yAxis,
+    valueYField: fieldName,
+    categoryXField: "year"
+  }));
+  series.columns.template.setAll({
+    tooltipText: "{name}, {categoryX}:{valueY}",
+    width: am5.percent(90),
+    tooltipY: 0
+  });
+  series.data.setAll(data);
+  series.appear();
+  series.bullets.push(function () {
+    return am5.Bullet.new(root, {
+      locationY: 0,
+      sprite: am5.Label.new(root, {
+        text: "{valueY}",
+        fill: root.interfaceColors.get("alternativeText"),
+        centerY: 0,
+        centerX: am5.p50,
+        populateText: true
+      })});});
+      legend.data.push(series);
+}
+      makeSeries("Brasil", "BR");
+      makeSeries("Mexico", "MEXICO");
+      makeSeries("Reino Unido", "RU");
+      chart.appear(1000, 100);});
+    </script>
+
+       <!--2º Gráfico usado no amcharts-->
+    <script>
+        am5.ready(function() {
+        var root = am5.Root.new("chardiv2");
+        root.setThemes([
+          am5themes_Animated.new(root)
+        ]);
+        var chart = root.container.children.push(am5percent.PieChart.new(root, 
+        {
+          layout: root.verticalLayout,
+          innerRadius: am5.percent(50)
+        }));
+        
+        var series = chart.series.push(am5percent.PieSeries.new(root, {
+          valueField: "value",
+          categoryField: "category",
+          alignLabels: false
+        }));
+        
+        series.labels.template.setAll({
+          textType: "circular",
+          centerX: 0,
+          centerY: 0
+        });
+        
+        series.data.setAll([
+          { value: 4, category: "Sac.Digital" },
+          { value: 3, category: "Panfleto" },
+          { value: 1, category: "SMSIdeal" },
+          { value: 2, category: "Consulta" },
+          { value: 3, category: "WhatsApp"}
+        ]);
+        
+        var legend = chart.children.push(am5.Legend.new(root, 
+        {
+          centerX: am5.percent(50),
+          x: am5.percent(50),
+          marginTop: 15,
+          marginBottom: 15,
+        }));
+        legend.data.setAll(series.dataItems);
+        series.appear(1000, 100);
+        });
+    </script>
+</html>
